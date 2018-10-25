@@ -328,6 +328,15 @@ function matchAlias(format, node, delta) {
   return applyFormat(delta, format, true);
 }
 
+function camelize(name) {
+  const parts = name.split('-');
+  const rest = parts
+    .slice(1)
+    .map(part => part[0].toUpperCase() + part.slice(1))
+    .join('');
+  return parts[0] + rest;
+}
+
 function matchAttributor(node, delta, scroll) {
   const attributes = Attributor.keys(node);
   const classes = ClassAttributor.keys(node);
@@ -345,11 +354,8 @@ function matchAttributor(node, delta, scroll) {
       attr = ATTRIBUTE_ATTRIBUTORS[name];
       if (attr != null && (attr.attrName === name || attr.keyName === name)) {
         formats[attr.attrName] = attr.value(node) || undefined;
-      }
-      attr = STYLE_ATTRIBUTORS[name];
-      if (attr != null && (attr.attrName === name || attr.keyName === name)) {
-        attr = STYLE_ATTRIBUTORS[name];
-        formats[attr.attrName] = attr.value(node) || undefined;
+      } else {
+        formats[name] = node.style[camelize(name)] || undefined;
       }
     });
   if (Object.keys(formats).length > 0) {
