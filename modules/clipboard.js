@@ -19,6 +19,7 @@ import { ColorStyle } from '../formats/color';
 import { DirectionAttribute, DirectionStyle } from '../formats/direction';
 import { FontStyle } from '../formats/font';
 import { SizeStyle } from '../formats/size';
+import {CustomStyles} from "../formats/customStyles";
 
 const debug = logger('quill:clipboard');
 
@@ -54,6 +55,7 @@ const STYLE_ATTRIBUTORS = [
   DirectionStyle,
   FontStyle,
   SizeStyle,
+  CustomStyles,
 ].reduce((memo, attr) => {
   memo[attr.keyName] = attr;
   return memo;
@@ -354,8 +356,11 @@ function matchAttributor(node, delta, scroll) {
       attr = ATTRIBUTE_ATTRIBUTORS[name];
       if (attr != null && (attr.attrName === name || attr.keyName === name)) {
         formats[attr.attrName] = attr.value(node) || undefined;
-      } else {
-        formats[name] = node.style[camelize(name)] || undefined;
+      }
+      attr = STYLE_ATTRIBUTORS[name];
+      if (attr != null && (attr.attrName === name || attr.keyName === name)) {
+        attr = STYLE_ATTRIBUTORS[name];
+        formats[attr.attrName] = attr.value(node) || undefined;
       }
     });
   if (Object.keys(formats).length > 0) {
