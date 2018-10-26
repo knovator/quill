@@ -19,7 +19,7 @@ import { ColorStyle } from '../formats/color';
 import { DirectionAttribute, DirectionStyle } from '../formats/direction';
 import { FontStyle } from '../formats/font';
 import { SizeStyle } from '../formats/size';
-import {CustomStyles} from "../formats/customStyles";
+import { CustomStyles } from '../formats/customStyles';
 
 const debug = logger('quill:clipboard');
 
